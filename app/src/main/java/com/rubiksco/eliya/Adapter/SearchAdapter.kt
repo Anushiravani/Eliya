@@ -37,6 +37,7 @@ class SearchAdapter(val context :Context ) : RecyclerView.Adapter<SearchAdapter.
         list.clear()
         list.addAll(data)
         notifyDataSetChanged()
+        
     }
 
 
