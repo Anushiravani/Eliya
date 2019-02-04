@@ -24,6 +24,9 @@ import android.view.View
 import android.view.View.OnTouchListener
 import android.widget.EditText
 import com.rubiksco.eliya.Static.Static.hideSoftKeyboard
+import android.app.ProgressDialog
+import android.opengl.Visibility
+import android.widget.ProgressBar
 
 
 class MainActivity : AppCompatActivity() {
@@ -46,26 +49,25 @@ class MainActivity : AppCompatActivity() {
 
 
         searchAdapter = SearchAdapter(this)
-        movies_list.addItemDecoration(DividerItemDecoration(this, DividerItemDecoration.VERTICAL))
+      //  movies_list.addItemDecoration(DividerItemDecoration(this, DividerItemDecoration.VERTICAL))
         movies_list.adapter = searchAdapter
 
 
         UpdateResultSearch();
 
         button.setOnClickListener {
-
-
             UpdateResultSearch(search_txt.text.toString(),true)
+
 
 
 
         }
         swipe.setOnRefreshListener {
-
             UpdateResultSearch(search_txt.text.toString(),true)
 
-
         }
+
+
 
 
        // movies_list.layoutManager =
@@ -75,8 +77,16 @@ class MainActivity : AppCompatActivity() {
 
     fun UpdateResultSearch(query:String?="", forceUpdate:Boolean=false){
         val retrofit :Retrofit = this.GetRetrofit()
-        swipe.setRefreshing(true);
+        //swipe.setRefreshing(true);
+        swipe.setRefreshing(false);
+
         hideKeyboard()
+        movies_list.setVisibility(View.GONE)
+        progressBar.setVisibility(View.VISIBLE)
+
+
+
+
 
         var apisearch = retrofit.create(SearchApi::class.java)
         apisearch.SearchPage(query!!)
@@ -85,24 +95,18 @@ class MainActivity : AppCompatActivity() {
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe({
                     //   var list : SearchModel=it
-
-
-
                     if(forceUpdate){
                         searchAdapter.UpdateItems(it.list)
-                        showToast(query)
                     }
-
                     else{
                         searchAdapter.setItems(it.list)
-                    }
-
-                    swipe.setRefreshing(false);
-
+                    }                    //swipe.setRefreshing(false);
+                    progressBar.setVisibility(View.GONE)
+                    movies_list.setVisibility(View.VISIBLE)
                 },{
 
 
-                    showToast(it.message)
+
                 })
 
     }

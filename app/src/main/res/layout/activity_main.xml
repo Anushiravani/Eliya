@@ -6,55 +6,79 @@
 	android:layout_height="match_parent"
 	tools:context=".MainActivity">
 	
-	<LinearLayout
+	
+	<android.support.v7.widget.CardView
+		xmlns:android="http://schemas.android.com/apk/res/android"
+		xmlns:card_view="http://schemas.android.com/apk/res-auto"
 		android:id="@+id/constraintLayout"
 		android:layout_width="match_parent"
 		android:layout_height="50dp"
-		android:layout_marginTop="8dp"
-		app:layout_constraintEnd_toEndOf="parent"
-		app:layout_constraintStart_toStartOf="parent"
-		android:weightSum="10"
+		android:layout_marginTop="0dp"
+		android:padding="0dp"
+		
 		android:orientation="horizontal"
-		android:gravity="center"
-		app:layout_constraintTop_toTopOf="parent">
+		card_view:cardCornerRadius="3dp"
+		card_view:cardElevation="4dp"
+		card_view:cardUseCompatPadding="true"
+		card_view:layout_constraintTop_toTopOf="parent">
 		
-		<Button
-			android:id="@+id/button"
+		
+		<LinearLayout
+			
+			android:layout_width="match_parent"
+			android:background="@color/colorPrimary"
 			android:layout_height="match_parent"
-			android:layout_weight="3"
-			android:layout_width="0dp"
-			android:layout_gravity="center"
-			android:text="جستجو"
-			/>
- 
+			
+			android:gravity="center"
+			android:orientation="horizontal"
+			android:paddingLeft="10dp"
+			android:paddingRight="10dp"
+			android:weightSum="10"
+			app:layout_constraintEnd_toEndOf="parent"
+			app:layout_constraintStart_toStartOf="parent"
+			
+			app:layout_constraintTop_toTopOf="parent">
+			
+			
+			<Button
+				android:id="@+id/button"
+				android:layout_width="0dp"
+				android:layout_height="35dp"
+				android:layout_gravity="center"
+				android:layout_marginRight="10dp"
+				android:layout_weight="2"
+				android:text="جستجو"
+				android:textSize="12dp" />
+			
+			
+			<EditText
+				android:id="@+id/search_txt"
+				
+				
+				android:layout_width="0dp"
+				android:layout_height="wrap_content"
+				android:layout_gravity="center"
+				android:layout_weight="7"
+				android:background="#fff"
+				android:inputType="textPersonName"
+				
+				
+				android:text=""
+				android:textAlignment="center"
+				
+				/>
 		
-		<EditText
-			android:id="@+id/search_txt"
-			
-			
-			
-			android:layout_height="match_parent"
-			android:layout_weight="7"
-			android:layout_gravity="center"
-			android:text=""
-			android:layout_width="0dp"
-			android:textAlignment="center"
-			android:lineHeight="50dp"
-		 
-			android:inputType="textPersonName"
-			android:background="#fff"
-			
-			 />
 		
-
-	</LinearLayout>
+		</LinearLayout>
 	
+	
+	</android.support.v7.widget.CardView>
 	<android.support.v4.widget.SwipeRefreshLayout
 		
 		android:id="@+id/swipe"
 		android:layout_width="0dp"
 		android:layout_height="0dp"
-		android:layout_marginTop="8dp"
+		android:layout_marginTop="2dp"
 		
 		app:layout_constraintBottom_toBottomOf="parent"
 		
@@ -71,5 +95,19 @@
 			android:layout_height="match_parent"
 			app:layoutManager="android.support.v7.widget.LinearLayoutManager" />
 	</android.support.v4.widget.SwipeRefreshLayout>
+	<ProgressBar
+		android:id="@+id/progressBar"
+		style="?android:attr/progressBarStyleLarge"
+		android:layout_width="wrap_content"
+		android:layout_height="wrap_content"
+		android:layout_centerHorizontal="true"
+		android:layout_marginStart="8dp"
+		android:layout_marginTop="8dp"
+		android:visibility="gone"
+		android:layout_marginBottom="8dp"
+		app:layout_constraintBottom_toBottomOf="parent"
+		app:layout_constraintEnd_toEndOf="@+id/swipe"
+		app:layout_constraintStart_toStartOf="@+id/swipe"
+		app:layout_constraintTop_toTopOf="@+id/swipe" />
 
 </android.support.constraint.ConstraintLayout>
