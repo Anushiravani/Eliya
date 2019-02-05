@@ -1,12 +1,14 @@
 package com.rubiksco.eliya
 
 import android.annotation.SuppressLint
+import android.content.Intent
 import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
 import android.widget.Toast
 import com.rubiksco.eliya.Api.LoginApi
 import com.rubiksco.eliya.Static.GetRetrofit
 import com.rubiksco.eliya.Static.Static
+import com.rubiksco.eliya.Static.preference
 import com.rubiksco.eliya.Static.showToast
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers
@@ -44,11 +46,12 @@ class LoginActivity : AppCompatActivity() {
             .observeOn(AndroidSchedulers.mainThread())
             .subscribe({
                 //swipe.setRefreshing(false);
-                var res=it;
 
 
+                preference(Static.TokenName,it.accessToken!!,"")
 
-
+                val intent = Intent(this, MainActivity::class.java)
+                startActivity(intent)
 
             },{
                 showToast("کد وارد شده صحیح نیست",Toast.LENGTH_SHORT)

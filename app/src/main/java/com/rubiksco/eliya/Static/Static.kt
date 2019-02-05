@@ -11,6 +11,12 @@ object Static {
 
     val SiteApiUrl="https://tgmapp.ir/shopsapi/"
 
+
+    //Share
+    val TokenName="Token"
+
+
+
     fun hideSoftKeyboard(activity: Activity) {
         val inputMethodManager = activity.getSystemService(
                 Activity.INPUT_METHOD_SERVICE) as InputMethodManager
