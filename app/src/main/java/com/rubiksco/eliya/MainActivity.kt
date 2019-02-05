@@ -8,10 +8,6 @@ import android.support.v7.widget.RecyclerView
 import com.rubiksco.eliya.Adapter.SearchAdapter
 import com.rubiksco.eliya.Api.SearchApi
 import com.rubiksco.eliya.Models.SearchModel
-import com.rubiksco.eliya.Static.GetRetrofit
-import com.rubiksco.eliya.Static.Static
-import com.rubiksco.eliya.Static.hideKeyboard
-import com.rubiksco.eliya.Static.showToast
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers
 import kotlinx.android.synthetic.main.activity_main.*
@@ -19,6 +15,7 @@ import kotlinx.android.synthetic.main.activity_main.*
 import retrofit2.Retrofit
 
 import android.view.View
+import com.rubiksco.eliya.Static.*
 
 class MainActivity : AppCompatActivity() {
 
@@ -33,6 +30,29 @@ class MainActivity : AppCompatActivity() {
 
         searchAdapter = SearchAdapter(this)
         movies_list.adapter = searchAdapter
+
+
+      var lastsearch   =  preference("lastsearch")
+
+
+
+
+
+
+
+/*
+'
+
+        var pref by PreferencesDelegate(this, "key")
+
+        fun foo() {
+            pref = "test"
+
+        }
+
+*/
+
+
         UpdateResultSearch()
         button.setOnClickListener { UpdateResultSearch(search_txt.text.toString(),true) }
         swipe.setOnRefreshListener {UpdateResultSearch(search_txt.text.toString(),true) }
@@ -67,6 +87,8 @@ class MainActivity : AppCompatActivity() {
                     }                    //swipe.setRefreshing(false);
                     progressBar.visibility = View.GONE
                     movies_list.visibility = View.VISIBLE
+
+                    preference("lastsearch",query,"")
                 },{
 
                 })
