@@ -13,6 +13,10 @@ import retrofit2.Retrofit
 import retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory
 import retrofit2.converter.gson.GsonConverterFactory
 import kotlin.reflect.KProperty
+import javax.xml.datatype.DatatypeConstants.SECONDS
+
+import okhttp3.OkHttpClient
+import okhttp3.logging.HttpLoggingInterceptor
 
 
 fun Context.showToast(text: CharSequence?, duration: Int = Toast.LENGTH_SHORT) {
@@ -27,9 +31,21 @@ fun Context.hideKeyboard(view: View) {
 }
 fun Context.GetRetrofit(baseurl:String=Static.StiteUrl): Retrofit {
 
+    val interceptor = HttpLoggingInterceptor()
+    interceptor.level = HttpLoggingInterceptor.Level.BODY
+
+
+/*    interceptor.readTimeout(READ_TIMEOUT_SECONDS, TimeUnit.SECONDS)
+        .writeTimeout(WRITE_TIMEOUT_SECONDS, TimeUnit.SECONDS)
+        .connectTimeout(CONNECTION_TIMEOUT_SECONDS, TimeUnit.SECONDS)*/
+
+
+    val client = OkHttpClient.Builder().addInterceptor(interceptor).build()
+
 
         val retrofit : Retrofit = Retrofit.Builder()
             .baseUrl(baseurl)
+            .client(client)
             .addConverterFactory(GsonConverterFactory.create())
             .addCallAdapterFactory(RxJava2CallAdapterFactory.create())
             .build()

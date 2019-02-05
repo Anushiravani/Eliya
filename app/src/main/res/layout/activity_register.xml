@@ -20,6 +20,7 @@
                 android:layout_height="wrap_content"
                 android:hint="@string/numberHint"
                 android:id="@+id/number_txt"
+                android:inputType="number"
         android:textDirection="ltr"
 
 

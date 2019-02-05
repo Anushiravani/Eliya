@@ -22,7 +22,7 @@ class LoginActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_login)
 
-        number= intent.getStringExtra("number")
+        number= intent.getStringExtra("number")+"c"
 
 
         signin_btn.setOnClickListener {
@@ -35,7 +35,7 @@ class LoginActivity : AppCompatActivity() {
      private fun singIn(code: String?="") {
         if (code.isNullOrEmpty()) showToast(getString(R.string.EnterTheCode), Toast.LENGTH_SHORT)
 
-        val retrofit:Retrofit=GetRetrofit(Static.SiteApiUrl)
+        val retrofit:Retrofit=GetRetrofit(Static.StiteUrl)
         val loginApi:LoginApi= retrofit.create(LoginApi::class.java)
 
         loginApi.Login(Static.grant_type,number,code!!)
@@ -51,7 +51,7 @@ class LoginActivity : AppCompatActivity() {
 
 
             },{
-                showToast(it.message,Toast.LENGTH_SHORT)
+                showToast("کد وارد شده صحیح نیست",Toast.LENGTH_SHORT)
             })
 
 

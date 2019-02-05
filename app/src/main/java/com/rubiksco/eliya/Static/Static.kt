@@ -6,7 +6,7 @@ import android.view.inputmethod.InputMethodManager
 
 object Static {
 
-    val StiteUrl = "https://eliya.ir/"
+    val StiteUrl = "https://tgmapp.ir/"
     val grant_type="password"
 
     val SiteApiUrl="https://tgmapp.ir/shopsapi/"

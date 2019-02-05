@@ -23,12 +23,15 @@ class MainActivity : AppCompatActivity() {
     private lateinit var searchAdapter : SearchAdapter
 
     override fun onCreate(savedInstanceState: Bundle?) {
+        val intent = Intent(this, RegisterActivity::class.java)
+        startActivity(intent)
+
+
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
 
-        val intent = Intent(this, RegisterActivity::class.java)
-        startActivity(intent)
+
 
 
 
