@@ -6,8 +6,10 @@ import android.view.inputmethod.InputMethodManager
 
 object Static {
 
-    val StiteUrl = "https://eliya.ir"
+    val StiteUrl = "https://eliya.ir/"
+    val grant_type="password"
 
+    val SiteApiUrl="https://tgmapp.ir/shopsapi/"
 
     fun hideSoftKeyboard(activity: Activity) {
         val inputMethodManager = activity.getSystemService(

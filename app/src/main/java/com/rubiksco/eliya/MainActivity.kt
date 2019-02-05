@@ -1,13 +1,13 @@
 package com.rubiksco.eliya
 
 import android.annotation.SuppressLint
+import android.content.Intent
 import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
-import android.support.v7.widget.DividerItemDecoration
-import android.support.v7.widget.RecyclerView
+
 import com.rubiksco.eliya.Adapter.SearchAdapter
 import com.rubiksco.eliya.Api.SearchApi
-import com.rubiksco.eliya.Models.SearchModel
+
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers
 import kotlinx.android.synthetic.main.activity_main.*
@@ -27,12 +27,21 @@ class MainActivity : AppCompatActivity() {
         setContentView(R.layout.activity_main)
 
 
+        val intent = Intent(this, RegisterActivity::class.java)
+        startActivity(intent)
+
+
 
         searchAdapter = SearchAdapter(this)
         movies_list.adapter = searchAdapter
 
 
       var lastsearch   =  preference("lastsearch")
+        if (lastsearch!="") {
+            UpdateResultSearch(lastsearch)
+            search_txt.setText(lastsearch)
+        }else
+            UpdateResultSearch()
 
 
 
@@ -40,24 +49,11 @@ class MainActivity : AppCompatActivity() {
 
 
 
-/*
-'
 
-        var pref by PreferencesDelegate(this, "key")
-
-        fun foo() {
-            pref = "test"
-
-        }
-
-*/
-
-
-        UpdateResultSearch()
         button.setOnClickListener { UpdateResultSearch(search_txt.text.toString(),true) }
         swipe.setOnRefreshListener {UpdateResultSearch(search_txt.text.toString(),true) }
 
-       // movies_list.layoutManager =
+
     }
 
 
@@ -66,13 +62,16 @@ class MainActivity : AppCompatActivity() {
     fun UpdateResultSearch(query:String?="", forceUpdate:Boolean=false){
         val retrofit :Retrofit = this.GetRetrofit()
         //swipe.setRefreshing(true);
-        swipe.isRefreshing = false;
+        swipe.isRefreshing = false
 
         hideKeyboard()
         movies_list.visibility = View.GONE
         progressBar.visibility = View.VISIBLE
+        preference("lastsearch",query!!,"")
 
-        var apisearch = retrofit.create(SearchApi::class.java)
+        val apisearch = retrofit.create(SearchApi::class.java)
+
+
         apisearch.SearchPage(query!!)
                 .subscribeOn(Schedulers.io())
                 .unsubscribeOn(Schedulers.computation())
@@ -88,7 +87,7 @@ class MainActivity : AppCompatActivity() {
                     progressBar.visibility = View.GONE
                     movies_list.visibility = View.VISIBLE
 
-                    preference("lastsearch",query,"")
+
                 },{
 
                 })

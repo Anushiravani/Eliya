@@ -1,3 +1,9 @@
 <resources>
     <string name="app_name">Eliya</string>
+    <string name="SignUp">ورود به برنامه</string>
+    <string name="numberHint">09*********</string>
+    <string name="signInCode">کد ثبت نام</string>
+    <string name="SignIn">ورود</string>
+    <string name="PleasEnterTheCode">لطفا کد ارسال شده را وارد کنید</string>
+    <string name="EnterTheCode">کد را وارد نمایید</string>
 </resources>
