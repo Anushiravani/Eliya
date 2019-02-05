@@ -1,5 +1,6 @@
 package com.rubiksco.eliya
 
+import android.annotation.SuppressLint
 import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
 import android.support.v7.widget.DividerItemDecoration
@@ -16,18 +17,8 @@ import io.reactivex.schedulers.Schedulers
 import kotlinx.android.synthetic.main.activity_main.*
 
 import retrofit2.Retrofit
-import retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory
-import retrofit2.converter.gson.GsonConverterFactory
-import android.view.ViewGroup
-import android.view.MotionEvent
-import android.view.View
-import android.view.View.OnTouchListener
-import android.widget.EditText
-import com.rubiksco.eliya.Static.Static.hideSoftKeyboard
-import android.app.ProgressDialog
-import android.opengl.Visibility
-import android.widget.ProgressBar
 
+import android.view.View
 
 class MainActivity : AppCompatActivity() {
 
@@ -39,54 +30,27 @@ class MainActivity : AppCompatActivity() {
         setContentView(R.layout.activity_main)
 
 
-     // val retrofit :Retrofit = this.GetRetrofit()
-     /*   val retrofit : Retrofit = Retrofit.Builder()
-            .baseUrl(Static.StiteUrl)
-            .addConverterFactory(GsonConverterFactory.create())
-            .addCallAdapterFactory(RxJava2CallAdapterFactory.create())
-            .build()
-*/
-
 
         searchAdapter = SearchAdapter(this)
-      //  movies_list.addItemDecoration(DividerItemDecoration(this, DividerItemDecoration.VERTICAL))
         movies_list.adapter = searchAdapter
-
-
-        UpdateResultSearch();
-
-        button.setOnClickListener {
-            UpdateResultSearch(search_txt.text.toString(),true)
-
-
-
-
-        }
-        swipe.setOnRefreshListener {
-            UpdateResultSearch(search_txt.text.toString(),true)
-
-        }
-
-
-
+        UpdateResultSearch()
+        button.setOnClickListener { UpdateResultSearch(search_txt.text.toString(),true) }
+        swipe.setOnRefreshListener {UpdateResultSearch(search_txt.text.toString(),true) }
 
        // movies_list.layoutManager =
     }
 
 
 
+    @SuppressLint("CheckResult")
     fun UpdateResultSearch(query:String?="", forceUpdate:Boolean=false){
         val retrofit :Retrofit = this.GetRetrofit()
         //swipe.setRefreshing(true);
-        swipe.setRefreshing(false);
+        swipe.isRefreshing = false;
 
         hideKeyboard()
-        movies_list.setVisibility(View.GONE)
-        progressBar.setVisibility(View.VISIBLE)
-
-
-
-
+        movies_list.visibility = View.GONE
+        progressBar.visibility = View.VISIBLE
 
         var apisearch = retrofit.create(SearchApi::class.java)
         apisearch.SearchPage(query!!)
@@ -101,11 +65,9 @@ class MainActivity : AppCompatActivity() {
                     else{
                         searchAdapter.setItems(it.list)
                     }                    //swipe.setRefreshing(false);
-                    progressBar.setVisibility(View.GONE)
-                    movies_list.setVisibility(View.VISIBLE)
+                    progressBar.visibility = View.GONE
+                    movies_list.visibility = View.VISIBLE
                 },{
-
-
 
                 })
 
