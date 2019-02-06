@@ -91,29 +91,11 @@ class MainActivity : AppCompatActivity() {
             UpdateResultSearch()
 
 
-
-
-
-
-
-
         button.setOnClickListener {
-         //   val rxPermissions = RxPermissions(this)
 
-          //  rxPermissions.request(Manifest.permission.WRITE_EXTERNAL_STORAGE)
-               // .subscribe {
-                  //  if (it!!){
-                        Pix.start(this,                    //Activity or Fragment Instance
-                            222,                //Request code for activity results
-                            10);    //Number of images to restict selection count
-                  //  }
-                   // else{
+            Static.ShowWeb(this,"https://eliya.ir/","چت آنلاین")
 
-                        //TODO Show Grant Failed
-              //      }
-             //   }
-           // UpdateResultSearch(search_txt.text.toString(),true)
-
+                 //       Pix.start(this, 222, 10);
 
         }
         swipe.setOnRefreshListener {UpdateResultSearch(search_txt.text.toString(),true) }

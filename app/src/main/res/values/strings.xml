@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">Eliya</string>
+    <string name="app_name">ثبت شرکت ایلیا</string>
     <string name="SignUp">ورود به برنامه</string>
     <string name="numberHint">09*********</string>
     <string name="signInCode">کد ثبت نام</string>
