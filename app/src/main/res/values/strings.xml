@@ -6,4 +6,7 @@
     <string name="SignIn">ورود</string>
     <string name="PleasEnterTheCode">لطفا کد ارسال شده را وارد کنید</string>
     <string name="EnterTheCode">کد را وارد نمایید</string>
+    <string name="CompleteProfile">تکمیل اطلاعات</string>
+    <string name="OnlineChat">چت آنلاین</string>
+    <string name="contactUs">تماس با ما</string>
 </resources>

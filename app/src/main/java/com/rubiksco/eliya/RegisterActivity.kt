@@ -43,7 +43,6 @@ class RegisterActivity : AppCompatActivity() {
             .unsubscribeOn(Schedulers.computation())
             .observeOn(AndroidSchedulers.mainThread())
             .subscribe({
-                              //swipe.setRefreshing(false);
 
                 if (it.status){
                     showToast("انجام شد:",Toast.LENGTH_SHORT)
