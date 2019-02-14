@@ -46,17 +46,7 @@ class RegisterActivity : AppCompatActivity() {
     private fun gotologinwithnumber(number: String=""){
 
 
-        if(number ==""){
-            showToast("ابتدا شماره موبایل خودرا وارد نمایید", Toast.LENGTH_SHORT)
-            return
-        }
-
-        if (!number.matches("(\\+98|0)?9\\d{9}".toRegex())) {
-            showToast("شماره موبایل نامعتبر هست", Toast.LENGTH_SHORT)
-
-            return
-
-        }
+       if(!checKmobile(number)) return
 
         val intent = Intent(this, LoginActivity::class.java) //not application context
         intent.putExtra("number",number)
@@ -68,17 +58,10 @@ class RegisterActivity : AppCompatActivity() {
    @SuppressLint("CheckResult")
    private fun SignUp(number:String=""){
 
+       if(!checKmobile(number)) return
 
 
-        if (!number.matches("(\\+98|0)?9\\d{9}".toRegex())) {
-            showToast("شماره موبایل نامعتبر هست", Toast.LENGTH_SHORT)
-
-            return
-
-        }
-
-
-        var retrofit :Retrofit = GetRetrofit(Static.SiteApiUrl)
+       var retrofit :Retrofit = GetRetrofit(Static.SiteApiUrl)
         val apiRegister = retrofit.create(RegisterApi::class.java)
         progressBarRegister.visibility = View.VISIBLE
         signUp_btn.isEnabled = false;
@@ -109,5 +92,20 @@ class RegisterActivity : AppCompatActivity() {
             },{
 
             })
+    }
+
+    fun  checKmobile(number :String=""):Boolean{
+        if(number ==""){
+            showToast("ابتدا شماره موبایل خود را وارد نمایید", Toast.LENGTH_SHORT)
+            return false
+        }
+
+        if (!number.matches("(\\+98|0)?9\\d{9}".toRegex())) {
+            showToast("شماره موبایل نامعتبر هست", Toast.LENGTH_SHORT)
+
+            return false
+
+        }
+        return true
     }
 }

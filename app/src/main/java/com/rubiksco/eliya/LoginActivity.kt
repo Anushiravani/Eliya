@@ -4,6 +4,7 @@ import android.annotation.SuppressLint
 import android.content.Intent
 import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
+import android.view.View
 import android.widget.Toast
 import com.rubiksco.eliya.Api.LoginApi
 import com.rubiksco.eliya.Static.GetRetrofit
@@ -31,6 +32,13 @@ class LoginActivity : AppCompatActivity() {
             singIn(code_txt.text.toString())
         }
 
+        changenumber.setOnClickListener {
+            val intent = Intent(this, RegisterActivity::class.java) //not application context
+
+            startActivity(intent)
+
+        }
+
     }
 
     @SuppressLint("CheckResult")
@@ -39,14 +47,14 @@ class LoginActivity : AppCompatActivity() {
 
         val retrofit:Retrofit=GetRetrofit(Static.StiteUrl)
         val loginApi:LoginApi= retrofit.create(LoginApi::class.java)
-
+        progressBarSignIn.visibility = View.VISIBLE
         loginApi.Login(Static.grant_type,number,code!!)
             .subscribeOn(Schedulers.io())
             .unsubscribeOn(Schedulers.computation())
             .observeOn(AndroidSchedulers.mainThread())
             .subscribe({
                 //swipe.setRefreshing(false);
-
+                progressBarSignIn.visibility = View.GONE
 
                 preference(Static.TokenName,it.accessToken!!,"")
 
@@ -55,6 +63,8 @@ class LoginActivity : AppCompatActivity() {
 
             },{
                 showToast("کد وارد شده صحیح نیست",Toast.LENGTH_SHORT)
+
+                progressBarSignIn.visibility = View.GONE
             })
 
 

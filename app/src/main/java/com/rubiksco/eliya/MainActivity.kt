@@ -6,9 +6,7 @@ import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
 
 import com.rubiksco.eliya.Static.*
-
-
-
+import kotlinx.android.synthetic.main.activity_main.*
 
 
 class MainActivity : AppCompatActivity() {
@@ -20,6 +18,9 @@ class MainActivity : AppCompatActivity() {
         setContentView(R.layout.activity_main)
 
 
+     onlinechat.setOnClickListener {
+         Static.ShowWeb(this,"https://eliya.ir/chat.html","  آنلاین")
+     }
 
 
 
