@@ -56,4 +56,8 @@ dependencies {
     implementation 'com.android.support:customtabs:28.0.0'
 
 
+
+    implementation  'net.steamcrafted:materialiconlib:1.1.5'
+
+    implementation 'uk.co.chrisjenx:calligraphy:2.3.0'
 }
