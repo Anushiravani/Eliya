@@ -31,6 +31,13 @@ class RegisterActivity : AppCompatActivity() {
         setContentView(R.layout.activity_register)
 
 
+       // number= intent.getStringExtra("number")+"c"
+
+
+        if (intent.getStringExtra("renewtoke")=="yes"){
+            showToast("اعتبار حساب شما منقضی شده است لطفا مجددا وارد سامانه شوید",Toast.LENGTH_LONG)
+        }
+
         signUp_btn.setOnClickListener {
             SignUp(number_txt.text.toString())
         }

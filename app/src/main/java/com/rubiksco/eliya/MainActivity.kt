@@ -23,6 +23,15 @@ class MainActivity : AppCompatActivity() {
      }
 
 
+     aboutusbtn.setOnClickListener {
+
+         val intent = Intent(this, AboutUsActivity::class.java) //not application context
+
+         startActivity(intent)
+
+     }
+
+
 
     }
 
