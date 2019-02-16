@@ -15,6 +15,18 @@
             android:supportsRtl="true"
             android:theme="@style/AppTheme"
             tools:ignore="GoogleAppIndexingWarning">
+        <activity
+                android:name=".SendActivity"
+                android:label="@string/title_activity_send"
+                android:theme="@style/AppTheme.NoActionBar">
+        </activity>
+        <activity android:name=".ListDocsActivity">
+        </activity>
+        <activity
+                android:name=".DocsActivity"
+                android:label="ارسال مدارک"
+                android:theme="@style/AppTheme.NoActionBar">
+        </activity>
         <activity android:name=".AboutUsActivity">
         </activity>
         <activity android:name=".SearchActivity">

@@ -11,4 +11,6 @@
     <string name="contactUs">تماس با ما</string>
     <string name="EnterMobileNumber">شماره موبایل خود را وارد نمایید</string>
     <string name="registeredbefore">قبلا ثبت نام کرده ام</string>
+    <string name="title_activity_send">SendActivity</string>
+
 </resources>

@@ -54,18 +54,8 @@ class SearchAdapter(val context :Context ) : RecyclerView.Adapter<SearchAdapter.
         init {
 
             itemView.setOnClickListener {
-               // Toast.makeText(context,CurrentItem!!.title,Toast.LENGTH_LONG).show()
-              //  val context =itemView.context
 
                 Static.ShowWeb(context,CurrentItem?.url,CurrentItem?.title)
-             /*   val intent = Intent(context, WebActivity::class.java)
-                intent.putExtra("url",CurrentItem?.url)
-                intent.putExtra("title",CurrentItem?.title)
-                context.startActivity(intent)*/
-
-              //  val intent = Intent(this, WebActivity::class.java) //not application context
-              //  intent.putExtra("url",CurrentItem.url.to())
-              //  startActivity(intent)
 
 
             }

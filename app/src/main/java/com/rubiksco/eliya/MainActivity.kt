@@ -31,6 +31,12 @@ class MainActivity : AppCompatActivity() {
 
      }
 
+     senddocbtn.setOnClickListener {
+     val intent = Intent(this, ListDocsActivity::class.java) //not application context
+
+      startActivity(intent)
+     }
+
 
 
     }

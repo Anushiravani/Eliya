@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.v7.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+                                    xmlns:app="http://schemas.android.com/apk/res-auto"
+                                    xmlns:card_view="http://schemas.android.com/apk/res-auto"
+                                    android:id="@+id/card_view"
+
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+                                    android:layout_margin="4dp"
+
+                                    card_view:cardCornerRadius="4dp">
+
+        <TextView android:layout_width="match_parent" android:layout_height="match_parent"
+
+                  android:gravity="center"
+                  android:layout_gravity="center"
+                  android:text="متن تست"
+
+                  android:textStyle="bold"
+                  android:textSize="15dp"
+                  android:padding="10dp"
+                  android:textColor="@color/colorPrimaryDark"
+        android:id="@+id/docItemTitle"
+                  android:foreground="?android:attr/selectableItemBackground"
+
+        />
+
+
+    </android.support.v7.widget.CardView>
+
