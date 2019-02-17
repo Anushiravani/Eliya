@@ -7,7 +7,7 @@ import com.rubiksco.eliya.Adapter.ListDocsAdapter
 import com.rubiksco.eliya.Models.DocsItem
 import kotlinx.android.synthetic.main.activity_list_docs.*
 import android.support.v7.widget.GridLayoutManager
-import android.support.v7.widget.RecyclerView
+
 import uk.co.chrisjenx.calligraphy.CalligraphyContextWrapper
 
 

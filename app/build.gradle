@@ -61,5 +61,8 @@ dependencies {
 
     implementation 'net.steamcrafted:materialiconlib:1.1.5'
 
+    implementation 'com.squareup.picasso:picasso:2.71828'
+
+
     implementation 'uk.co.chrisjenx:calligraphy:2.3.0'
 }

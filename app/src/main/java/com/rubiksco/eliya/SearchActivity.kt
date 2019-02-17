@@ -28,30 +28,6 @@ class SearchActivity : AppCompatActivity() {
 
 
 
-    public override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
-        super.onActivityResult(requestCode, resultCode, data)
-        if (resultCode == Activity.RESULT_OK && requestCode == 222) {
-            val returnValue = data!!.getStringArrayListExtra(Pix.IMAGE_RESULTS)
-
-            var list2 = returnValue
-        }
-    }
-
-
-    override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<String>, grantResults: IntArray) {
-        when (requestCode) {
-            PermUtil.REQUEST_CODE_ASK_MULTIPLE_PERMISSIONS -> {
-                // If request is cancelled, the result arrays are empty.
-                if (grantResults.isNotEmpty() && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-                    Pix.start(this, 222, 10)
-                } else {
-                    Toast.makeText(this, "Approve permissions to open Pix ImagePicker", Toast.LENGTH_LONG)
-                        .show()
-                }
-                return
-            }
-        }
-    }
     override fun onCreate(savedInstanceState: Bundle?) {
 
         if (preference(Static.TokenName)==""){

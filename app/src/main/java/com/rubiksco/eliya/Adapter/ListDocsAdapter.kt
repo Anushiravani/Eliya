@@ -8,6 +8,7 @@ import android.view.View
 import android.view.ViewGroup
 import com.rubiksco.eliya.Models.DocsItem
 import com.rubiksco.eliya.R
+import com.rubiksco.eliya.SendActivity
 import kotlinx.android.synthetic.main.item_docs.view.*
 
 
@@ -60,9 +61,9 @@ class ListDocsAdapter(val context : Context) : RecyclerView.Adapter<ListDocsAdap
 
             //    Static.ShowWeb(context,CurrentItem?.url,CurrentItem?.title)
 
-               // val intent = Intent(context, SendActivity::class.java) //not application context
-
-              //  context.startActivity(intent)
+               val intent = Intent(context, SendActivity::class.java) //not application context
+                intent.putExtra("title",CurrentItem?.title)
+              context.startActivity(intent)
 
             }
         }
