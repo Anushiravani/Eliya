@@ -12,10 +12,10 @@ import com.rubiksco.eliya.WebActivity
 
 object Static {
 
-    val StiteUrl = "https://tgmapp.ir/"
+    val StiteUrl = "http://192.168.3.154:1407/"
     val grant_type="password"
 
-    val SiteApiUrl="https://tgmapp.ir/shopsapi/"
+    val SiteApiUrl="http://192.168.3.154:1407/clubapir/"
 
 
     //Share

@@ -22,6 +22,7 @@ interface SendFileApi {
         @Part surveyImage: ArrayList<MultipartBody.Part>,
       //  @Part propertyImage: MultipartBody.Part,
         @Part("contractcode") contractCode: String,
+        @Part("categorytitle") categorytitle: String,
         @Part("adminname") adminname: String
 
     ): Observable<SendResponseModel>

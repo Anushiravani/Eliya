@@ -72,26 +72,27 @@ class pixiAdapter(private val context: Context) : RecyclerView.Adapter<pixiAdapt
         notifyItemRemoved(position)
         notifyItemRangeChanged(position, list.size)
     }
+
     inner class pixiViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
+
 
         fun bindModel(item: String?, pos :Int?) {
 
-            val f = File(item)
-            val d = BitmapDrawable(context.resources, f.absolutePath).bitmap
-            //Bitmap scaled = com.fxn.utility.Utility.getScaledBitmap(512, com.fxn.utility.Utility.getExifCorrectedBitmap(f));
-            val scaled = com.fxn.utility.Utility.getScaledBitmap(512, d)
-        //    (holder as Holder).iv.setImageBitmap(scaled)
-            itemView.iv.setImageBitmap(scaled)
+           /* val ex =item!!.substring(item!!.lastIndexOf(".") + 1);
+            if (ex =="jpg" || ex=="pmg"){
 
-       //     Picasso.get().load(item).into(itemView.iv)
+            }*/
 
+            Picasso.get().load(item)    .placeholder(R.drawable.ic_file_text)
+                .into(itemView.iv)
 
+         //   filePath.substring(filePath.lastIndexOf(".") + 1);
 
             itemView.btndelete.setOnClickListener{
 
 
                 removeAt(pos!!)
-                //this.list.addAll(list)
+
                 notifyDataSetChanged()
             }
             itemView.zoom.setOnClickListener {
@@ -103,23 +104,14 @@ class pixiAdapter(private val context: Context) : RecyclerView.Adapter<pixiAdapt
                 nagDialog.setContentView(R.layout.preview_image)
 
 
-              //  val btnClose = nagDialog.findViewById(R.id.btnIvClose) as Button
-                //val ivPreview = nagDialog.findViewById(R.id.iv_preview_image) as ImageView
 
 
                 nagDialog.btnIvClose.setOnClickListener {
                     nagDialog.dismiss()
                 }
 
-                nagDialog.iv_preview_image.setImageBitmap(scaled)
+                Picasso.get().load(item).into(nagDialog.iv_preview_image)
 
-            //    btnIvClose.
-              /*  btnClose.setOnClickListener(object : OnClickListener() {
-                    fun onClick(arg0: View) {
-
-                        nagDialog.dismiss()
-                    }
-                })*/
                 nagDialog.show()
             }
 

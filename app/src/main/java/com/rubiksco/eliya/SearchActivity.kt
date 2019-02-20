@@ -6,8 +6,7 @@ import android.os.Bundle
 import android.support.v7.app.AppCompatActivity
 import android.view.View
 import android.widget.Toast
-import com.fxn.pix.Pix
-import com.fxn.utility.PermUtil
+
 import com.rubiksco.eliya.Adapter.SearchAdapter
 import com.rubiksco.eliya.Api.SearchApi
 import com.rubiksco.eliya.R
