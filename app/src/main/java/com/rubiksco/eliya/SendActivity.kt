@@ -1,10 +1,12 @@
 package com.rubiksco.eliya
 
+import android.Manifest
 import android.annotation.SuppressLint
 import android.app.Activity
 import android.content.Context
 import android.content.Intent
 import android.content.pm.PackageManager
+import android.net.Uri
 import android.os.Bundle
 import android.support.design.widget.Snackbar
 import android.support.v7.app.AppCompatActivity;
@@ -24,9 +26,6 @@ import android.view.View
 import android.widget.ArrayAdapter
 import com.rubiksco.eliya.Api.SendFileApi
 
-import com.rubiksco.eliya.Static.GetRetrofit
-import com.rubiksco.eliya.Static.GetToken
-
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers
 
@@ -36,36 +35,27 @@ import okhttp3.RequestBody
 import retrofit2.Retrofit
 import java.io.File
 import android.os.Build
+import android.support.v4.app.ActivityCompat
+import android.support.v4.content.ContextCompat
 import android.widget.ProgressBar
+import com.rubiksco.eliya.DBAccess.UserDB
+import com.rubiksco.eliya.DBAccess.Users
 import com.rubiksco.eliya.Others.ProgressRequestBody
-import com.rubiksco.eliya.Static.Static
-import com.rubiksco.eliya.Static.showToast
+import com.rubiksco.eliya.Static.*
+import ninja.sakib.pultusorm.core.PultusORM
 
 
 class SendActivity : AppCompatActivity()   {
 
-
-
-
-    /*override fun onProgressUpdate(percentage: Int) {
-        progressBar.progress = percentage;
-    }
-
-    override fun onError() {
-
-        showToast("ERROOORRR")
-    }
-
-    override fun onFinish() {
-        showToast("SUCCESS")
-
-    }*/
 
     private   val READ_REQUEST_CODE: Int = 42
 
     lateinit var typedocs  :String
 
     val listImageUploade  :HashSet<String> =HashSet()
+    val listImageUploadeURI  :HashSet<Uri> =HashSet()
+
+
 
 
     lateinit var  pixiAdapter:pixiAdapter
@@ -75,10 +65,26 @@ class SendActivity : AppCompatActivity()   {
         super.attachBaseContext(CalligraphyContextWrapper.wrap(newBase))
     }
 
+    fun requestRead() {
+        if (ContextCompat.checkSelfPermission(
+                this,
+                Manifest.permission.READ_EXTERNAL_STORAGE
+            ) != PackageManager.PERMISSION_GRANTED
+        ) {
 
+            ActivityCompat.requestPermissions(
+                this,
+                arrayOf(Manifest.permission.READ_EXTERNAL_STORAGE),
+                READ_REQUEST_CODE
+            )
+        } else {
+         //   performFileSearch()
+        }
+    }
     public override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
         if (requestCode == READ_REQUEST_CODE) {
+
             if (resultCode == Activity.RESULT_OK) {
 
 
@@ -89,9 +95,14 @@ class SendActivity : AppCompatActivity()   {
                     var currentItem = 0
                     val listim  :ArrayList<String> =ArrayList<String>()
                     while (currentItem < count) {
+
+
                         val imageUri = data.clipData!!.getItemAt(currentItem).uri
 
                         listim.add(imageUri.toString())
+                        listImageUploadeURI.add(data.clipData!!.getItemAt(currentItem).uri)
+
+
                         //do something with the image (save it to some directory or whatever you need to do with it here)
                         currentItem += 1
                     }
@@ -113,6 +124,7 @@ class SendActivity : AppCompatActivity()   {
                     val listim  :ArrayList<String> =ArrayList<String>()
                //     listim.add(imagePath.toString())
 
+                    var t = data.data
                     data.data?.also { uri ->
                         listim.add(uri.toString())
                     }
@@ -122,6 +134,7 @@ class SendActivity : AppCompatActivity()   {
                     pixiAdapter.addImage(listim)
                     textselectimage.text="در صورت نیاز عکس های دیگر ضمیمه کنید"
                     listImageUploade.addAll(listim)
+                    listImageUploadeURI.add(data.data)
                     boxsend.visibility = View.VISIBLE
                     //do something with the image (save it to some directory or whatever you need to do with it here)
                 }
@@ -129,6 +142,19 @@ class SendActivity : AppCompatActivity()   {
         }
     }
 
+    override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<String>, grantResults: IntArray) {
+
+        if (requestCode == READ_REQUEST_CODE) {
+            if (grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                performFileSearch()
+            } else {
+                // Permission Denied
+                Toast.makeText(this@SendActivity, "دسترسی داده نشده است", Toast.LENGTH_SHORT).show()
+            }
+            return
+        }
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults)
+    }
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_send)
@@ -139,7 +165,7 @@ class SendActivity : AppCompatActivity()   {
 
             if (!isSending){
 
-
+                requestRead()
                 performFileSearch()
 
 
@@ -157,13 +183,15 @@ class SendActivity : AppCompatActivity()   {
         docTitle.text= typedocs
 
 
-        sendodcsbtn.setOnClickListener {  SendDocs()}
+        sendodcsbtn.setOnClickListener {
+            SendDocs()}
     }
     fun performFileSearch() {
 
         val mimeTypes = arrayOf("image/*", "application/pdf")
 
         val intent = Intent(Intent.ACTION_GET_CONTENT)
+        intent.flags = Intent.FLAG_GRANT_READ_URI_PERMISSION;
 
         intent.addCategory(Intent.CATEGORY_OPENABLE);
        // intent.type = "*/*" //allows any image file type. Change * to specific extension to limit it
@@ -197,20 +225,34 @@ class SendActivity : AppCompatActivity()   {
     fun addItemsOnSpinner2() {
 
 
-        val list = ArrayList<String>()
 
-        list.add("خانم بهشتی")
-        list.add("خانم شفیغی")
-        list.add("خانم بهرامی")
-        list.add("خانم فرجام")
-        list.add("خانم ناخدازاده")
+
+
+        var userdb = UserDB(GetDb())
+
+        val retrofit : Retrofit = this.GetRetrofit(Static.SiteApiUrl)
+
+        //val az db ye static migiram ke vaziat akharin bar ke az api listo greftim malom she
+        // age null ya bishtar az 3rooz bud listo migire baad ye static save mikone ya update mikone
+
+        var liiist = userdb.resetAndsetUsers(retrofit,GetDb())
+
+
+
+
+
+        val list = ArrayList<String>()
+        for (item in liiist!!){
+            list.add(item.Name!!)
+        }
+
 
         val dataAdapter = ArrayAdapter(
             this,
             android.R.layout.simple_spinner_item, list
         )
         dataAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
-        selectd.setAdapter(dataAdapter)
+        selectd.adapter = dataAdapter
     }
 
     fun SendDocs(){
@@ -222,6 +264,8 @@ class SendActivity : AppCompatActivity()   {
 
     }
 
+
+
     @SuppressLint("CheckResult")
     private fun requestUploadSurvey() {
         //val propertyImageFile = File(surveyModel.getPropertyImagePath())
@@ -231,21 +275,55 @@ class SendActivity : AppCompatActivity()   {
 
         val surveyImagesParts= ArrayList<MultipartBody.Part>(  )
 
-        for (index in 0 until listImageUploade.size) {
-           /* Log.d(
-                FragmentActivity.TAG,
-                "requestUploadSurvey: survey image " + index + "  " + surveyModel.getPicturesList().get(index).getImagePath()
-            )*/
-            val file = File(listImageUploade.toArray()[index].toString())
-            val surveyBody = RequestBody.create(MediaType.parse("./*"), file)
-            surveyImagesParts.add( MultipartBody.Part.createFormData("SurveyImage $index", file.name, surveyBody))
+        var i=0;
+
+        listImageUploadeURI.forEach {
+
+              val imageCompression: ImageCompressionAsyncTask = @SuppressLint("StaticFieldLeak")
+              object : ImageCompressionAsyncTask() {
+                override fun onPostExecute(imageBytes: ByteArray) =
+// image here is compressed & ready to be sent to the server
+                     Unit
+            }
+
+            // imagePath as a string
+
+
+            val  filePath:String = getRealPathFromUri(it)
+
+            imageCompression.execute(filePath)
+
+            if (!filePath.isEmpty()) {
+
+                val  file =   File(filePath)
+              //  val surveyBody = RequestBody.create(MediaType.parse("./*"),file)
+                val surveyBody = RequestBody.create(MediaType.parse("./*"),imageCompression.get())
+
+                surveyImagesParts.add( MultipartBody.Part.createFormData("SurveyImage $i", file.name, surveyBody))
+
+            }
+
+
+
+            i += 1
         }
+
+
+//        for (index in 0 until listImageUploade.size) {
+//           /* Log.d(
+//                FragmentActivity.TAG,
+//                "requestUploadSurvey: survey image " + index + "  " + surveyModel.getPicturesList().get(index).getImagePath()
+//            )*/
+//            val file = File(listImageUploade.toArray()[index].toString())
+//            val surveyBody = RequestBody.create(MediaType.parse("./*"), file)
+//            surveyImagesParts.add( MultipartBody.Part.createFormData("SurveyImage $index", file.name, surveyBody))
+//        }
 
         var retrofit : Retrofit = GetRetrofit(Static.SiteApiUrl)
         val webServicesAPI = retrofit.create(SendFileApi::class.java)
 
 
-        webServicesAPI.SendFile(GetToken(),surveyImagesParts,"contractcode","sss")
+        webServicesAPI.SendFile(GetToken(),surveyImagesParts,contractnumber.text.toString(),typedocs,selectd.selectedItem.toString())
             .subscribeOn(Schedulers.io())
             .unsubscribeOn(Schedulers.computation())
             .observeOn(AndroidSchedulers.mainThread())

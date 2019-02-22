@@ -7,7 +7,7 @@ apply plugin: 'kotlin-android-extensions'
 android {
     compileSdkVersion 28
     defaultConfig {
-        applicationId "com.rubiksco.eliya"
+        applicationId "com.webdis.eliya"
         minSdkVersion 19
         targetSdkVersion 28
         versionCode 1
@@ -59,6 +59,8 @@ dependencies {
 
     implementation 'com.squareup.picasso:picasso:2.71828'
 
+
+    implementation 'ninja.sakib:BelleORM:v1.8'
 
 /*
 

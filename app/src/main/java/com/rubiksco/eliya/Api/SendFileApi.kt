@@ -15,11 +15,12 @@ interface SendFileApi {
 
 
     @Multipart
+    @Headers(  "Accept:application/json")
     @POST("form/")
     fun SendFile(
         @Header("Authorization") headre: String,
         //@Part List<MultipartBody.Part> file,
-        @Part surveyImage: ArrayList<MultipartBody.Part>,
+      @Part formCollection: ArrayList<MultipartBody.Part>,
       //  @Part propertyImage: MultipartBody.Part,
         @Part("contractcode") contractCode: String,
         @Part("categorytitle") categorytitle: String,

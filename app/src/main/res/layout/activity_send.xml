@@ -79,6 +79,7 @@ android:layoutDirection="rtl"
                       android:textColor="@color/colorPrimaryDark"
                       android:layout_gravity="center"
                       android:gravity="center"
+
                       android:textAlignment="center"
                       android:text="شماره قرار داد :  "/>
 
@@ -87,7 +88,7 @@ android:layoutDirection="rtl"
                       android:layout_height="match_parent"
                       android:layout_weight="1.3"
                       android:inputType="number"
-                      android:textAlignment="center"
+                      android:textAlignment="center"               android:id="@+id/contractnumber"
                       android:hint="xxxxxxxxx"
                       android:layout_margin="4dp"
                       android:background="@color/white"/>
