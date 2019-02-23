@@ -80,7 +80,7 @@ class SendActivity : AppCompatActivity()   {
                 READ_REQUEST_CODE
             )
         } else {
-         //   performFileSearch()
+            //   performFileSearch()
         }
     }
     public override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
@@ -122,16 +122,16 @@ class SendActivity : AppCompatActivity()   {
 
 
                 } else if (data.data != null) {
-                  ///  val imagePath = data.data!!.path
+                    ///  val imagePath = data.data!!.path
                     val listim  :ArrayList<String> =ArrayList<String>()
-               //     listim.add(imagePath.toString())
+                    //     listim.add(imagePath.toString())
 
                     var t = data.data
                     data.data?.also { uri ->
                         listim.add(uri.toString())
                     }
 
-                  //  val   imagePath   = data.clipData!!.getItemAt(0).uri
+                    //  val   imagePath   = data.clipData!!.getItemAt(0).uri
 
                     pixiAdapter.addImage(listim)
                     textselectimage.text="در صورت نیاز عکس های دیگر ضمیمه کنید"
@@ -178,7 +178,7 @@ class SendActivity : AppCompatActivity()   {
         val mLayoutManager = GridLayoutManager(this, 2)
 
         recycleimage.layoutManager = mLayoutManager
-          pixiAdapter =pixiAdapter(this)
+        pixiAdapter =pixiAdapter(this)
         recycleimage.adapter = pixiAdapter;
 
         addItemsOnSpinner2()
@@ -196,7 +196,7 @@ class SendActivity : AppCompatActivity()   {
         intent.flags = Intent.FLAG_GRANT_READ_URI_PERMISSION;
 
         intent.addCategory(Intent.CATEGORY_OPENABLE);
-       // intent.type = "*/*" //allows any image file type. Change * to specific extension to limit it
+        // intent.type = "*/*" //allows any image file type. Change * to specific extension to limit it
 //**These following line is the important one!
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
             intent.type = if (mimeTypes.size == 1) mimeTypes[0] else "*/*"
@@ -222,7 +222,7 @@ class SendActivity : AppCompatActivity()   {
         ) //SELECT_PICTURES is simply a global int used to check the calling intent in onActivityResult
 
 
-       // startActivityForResult(intent, READ_REQUEST_CODE)
+        // startActivityForResult(intent, READ_REQUEST_CODE)
     }
     @SuppressLint("CheckResult")
     fun addItemsOnSpinner2() {
@@ -253,18 +253,25 @@ class SendActivity : AppCompatActivity()   {
                 .observeOn(AndroidSchedulers.mainThread())
                 .doOnComplete {
                     updateList(listmodel)
+                   userdb.UpdateTotal(listmodel)
                 }
                 .subscribe({
 
                     listmodel=it
-                    userdb.UpdateTotal(it.filterIsInstance<Users>())
+
                 },{
 
                 })
 
 
         }else{
-            listmodel =  listDB.filterIsInstance<UserModel>()
+
+
+            var listdb =ArrayList<UserModel>()
+            for(item in listDB.filterIsInstance<Users>()){
+                listdb.add(UserModel(item.Id.toString(),item.Name!!))
+            }
+            updateList(listdb)
         }
 
 
@@ -273,20 +280,20 @@ class SendActivity : AppCompatActivity()   {
 
 
     }
-fun updateList(listmodel :List<UserModel> ){
-    val list = ArrayList<String>()
-    for (item in listmodel){
-        list.add(item.Name)
+    fun updateList(listmodel :List<UserModel> ){
+        val list = ArrayList<String>()
+        for (item in listmodel){
+            list.add(item.Name)
+        }
+
+
+        val dataAdapter = ArrayAdapter(
+            this,
+            android.R.layout.simple_spinner_item, list
+        )
+        dataAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
+        selectd.adapter = dataAdapter
     }
-
-
-    val dataAdapter = ArrayAdapter(
-        this,
-        android.R.layout.simple_spinner_item, list
-    )
-    dataAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
-    selectd.adapter = dataAdapter
-}
     fun SendDocs(){
 
 
@@ -301,7 +308,7 @@ fun updateList(listmodel :List<UserModel> ){
     @SuppressLint("CheckResult")
     private fun requestUploadSurvey() {
         //val propertyImageFile = File(surveyModel.getPropertyImagePath())
-       // val propertyImage = RequestBody.create(MediaType.parse("image/*"), propertyImageFile)
+        // val propertyImage = RequestBody.create(MediaType.parse("image/*"), propertyImageFile)
         //val propertyImagePart =   MultipartBody.Part.createFormData("PropertyImage", propertyImageFile.getName(), propertyImage)
 
 
@@ -311,11 +318,11 @@ fun updateList(listmodel :List<UserModel> ){
 
         listImageUploadeURI.forEach {
 
-              val imageCompression: ImageCompressionAsyncTask = @SuppressLint("StaticFieldLeak")
-              object : ImageCompressionAsyncTask() {
+            val imageCompression: ImageCompressionAsyncTask = @SuppressLint("StaticFieldLeak")
+            object : ImageCompressionAsyncTask() {
                 override fun onPostExecute(imageBytes: ByteArray) =
 // image here is compressed & ready to be sent to the server
-                     Unit
+                    Unit
             }
 
             // imagePath as a string
@@ -328,7 +335,7 @@ fun updateList(listmodel :List<UserModel> ){
             if (!filePath.isEmpty()) {
 
                 val  file =   File(filePath)
-              //  val surveyBody = RequestBody.create(MediaType.parse("./*"),file)
+                //  val surveyBody = RequestBody.create(MediaType.parse("./*"),file)
                 val surveyBody = RequestBody.create(MediaType.parse("./*"),imageCompression.get())
 
                 surveyImagesParts.add( MultipartBody.Part.createFormData("SurveyImage $i", file.name, surveyBody))
@@ -360,25 +367,15 @@ fun updateList(listmodel :List<UserModel> ){
             .unsubscribeOn(Schedulers.computation())
             .observeOn(AndroidSchedulers.mainThread())
             .subscribe({
-                //   var list : SearchModel=it
-
                 val res = it
-
-
-
-
-
             },{
-
-
-
             })
 
-       /* //val webServicesAPI = RetrofitManager.getInstance().getRetrofit().create(WebServicesAPI::class.java)
-        var surveyResponse: Observable<SendResponseModel>? = null
-        if (surveyImagesParts != null) {
-            surveyResponse = webServicesAPI.SendFile(Static.tok)
-        }
-        surveyResponse!!.enqueue(this)*/
+        /* //val webServicesAPI = RetrofitManager.getInstance().getRetrofit().create(WebServicesAPI::class.java)
+         var surveyResponse: Observable<SendResponseModel>? = null
+         if (surveyImagesParts != null) {
+             surveyResponse = webServicesAPI.SendFile(Static.tok)
+         }
+         surveyResponse!!.enqueue(this)*/
     }
 }

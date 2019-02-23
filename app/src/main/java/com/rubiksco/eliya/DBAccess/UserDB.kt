@@ -21,58 +21,57 @@ class  UserDB(var db :PultusORM){
 
 
 
-     fun  Add(user : Users){
+    fun  Add(user : Users){
 
-         db.save(user)
+        db.save(user)
 
-     }
+    }
 
-     fun Gets():List<Users>?{
+    fun Gets():List<Users>?{
         // val users     = db.find(Users())
 
-         val t    =db.find(Users()).filterIsInstance<Users>()
-         return  t
-     }
-fun UpdateTotal(users : List<Users> ){
+        val t    =db.find(Users()).filterIsInstance<Users>()
+        return  t
+    }
+    fun UpdateTotal(users : List<UserModel> ){
+
+
 
         db.drop(Users())
 
 
-    for (item in users){
-        db.save(item)
+        for (item in users){
+           var user =Users(item.Name)
+            db.save(user)
+        }
+
+        val staticdb = StaticDB(db)
+        val staticItem = staticdb.AddOrUpdate(Static.LastGetUser,"yes")
+
+    }
+    fun Dispose(){
+        db.close()
     }
 
-}
-     fun Dispose(){
-         db.close()
-     }
+
+
+    @SuppressLint("CheckResult")
+    fun GetsFromFb(  db :PultusORM): MutableList<Any>? {
+
+
+        val staticdb = StaticDB(db)
+
+        val staticItem = staticdb.Get(Static.LastGetUser)
+
+
+        return if (staticItem !=null &&  staticItem.diffWithNow()>-10)
+            db.find(Users())
+        else
+            null
 
 
 
-     @SuppressLint("CheckResult")
-     fun GetsFromFb(  db :PultusORM): List<Users>? {
-
-
-         val staticdb = StaticDB(db)
-         val staticItem = staticdb.Get(Static.LastGetUser)
-
-         return if (staticItem !=null &&  staticItem.diffWithNow() < 10)
-             db.find(Users()).filterIsInstance<Users>()
-         else
-             null
-
-
-
-   /*      if (list.size>0){
-             db.drop(Users())
-
-         }
-         for (item in list){
-            db.save(item)
-         }
-*/
-
-     }
+    }
 
 }
 

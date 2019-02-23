@@ -5,8 +5,12 @@ import ninja.sakib.pultusorm.annotations.PrimaryKey
 import ninja.sakib.pultusorm.core.PultusORM
 import ninja.sakib.pultusorm.core.PultusORMCondition
 import ninja.sakib.pultusorm.core.PultusORMUpdater
+import java.text.SimpleDateFormat
 import java.time.LocalDateTime
 import java.util.*
+
+
+
 
 class  StaticDB (var db : PultusORM){
 
@@ -17,7 +21,7 @@ class  StaticDB (var db : PultusORM){
 
 
         if (this.Get(name) ==null){
-            db.save(Static(name,value))
+           var d= db.save(Static(name,value))
             return
         }
 
@@ -41,9 +45,11 @@ class  StaticDB (var db : PultusORM){
             .eq("Name", name)
             .build()
 
-        val items: List<Static> =   db.find(Static(),condition).filterIsInstance<Static>()
-        if (items.size==1)
-            return items[0]
+        val items =   db.find(Static(),condition)
+        for (it in items) {
+            val std = it as Static
+             return  std
+        }
         return  null
     }
 
@@ -57,17 +63,31 @@ class Static{
     var Id: Int = 0
     var Name: String? = null
     var Value: String? = null
-    var CreateTime :Calendar?= Calendar.getInstance()
 
 
-    constructor() {}
+
+    var CreateTime :Date =Calendar.getInstance().time
+
+init {
+
+    CreateTime = Calendar.getInstance().time
+}
+    constructor()
     constructor(names : String, value :String) {
         this.Name = names
         this.Value=value
     }
 
+    fun toCalendar(date: Date): Calendar {
+        val cal = Calendar.getInstance()
+        cal.time = date
+        return cal
+    }
     fun diffWithNow():Int{
 
-      return  com.rubiksco.eliya.Static.Static.diffOfDaysByDateAndTime(this.CreateTime!!, Calendar.getInstance())
+
+
+
+      return  com.rubiksco.eliya.Static.Static.diffOfDaysByDateAndTime(toCalendar(this.CreateTime), Calendar.getInstance())
     }
 }

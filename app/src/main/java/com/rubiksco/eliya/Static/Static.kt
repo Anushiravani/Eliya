@@ -35,10 +35,10 @@ object Static {
     //Share
     val TokenName="Token"
 
-
+//"680670"
 
     //STATIC KEYS
-    val LastGetUser="LastGetUser"
+    val LastGetUser="LastGetUserDBs"
 
 
 
@@ -54,6 +54,7 @@ object Static {
 
         val duration = a.timeInMillis - b.timeInMillis
         return TimeUnit.MILLISECONDS.toDays(duration).toInt()
+
     }
 
     public fun diffOfDaysByDate( a: Calendar, b: Calendar ): Int {
