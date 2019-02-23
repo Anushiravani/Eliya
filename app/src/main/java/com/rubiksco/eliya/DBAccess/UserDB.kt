@@ -33,7 +33,16 @@ class  UserDB(var db :PultusORM){
          val t    =db.find(Users()).filterIsInstance<Users>()
          return  t
      }
+fun UpdateTotal(users : List<Users> ){
 
+        db.drop(Users())
+
+
+    for (item in users){
+        db.save(item)
+    }
+
+}
      fun Dispose(){
          db.close()
      }
@@ -41,81 +50,28 @@ class  UserDB(var db :PultusORM){
 
 
      @SuppressLint("CheckResult")
-     fun resetAndsetUsers(retrofit:Retrofit , db :PultusORM): List<Users>? {
+     fun GetsFromFb(  db :PultusORM): List<Users>? {
 
 
          val staticdb = StaticDB(db)
          val staticItem = staticdb.Get(Static.LastGetUser)
 
-        if (staticItem !=null &&  staticItem.diffWithNow() < 10){
-             return  db.find(Users()).filterIsInstance<Users>()
-
-        }
-        staticdb.AddOrUpdate(Static.LastGetUser,"saved")
-
-         val api = retrofit.create(StaticApi::class.java)
-
-         var list : ArrayList<UserModel> = ArrayList()
+         return if (staticItem !=null &&  staticItem.diffWithNow() < 10)
+             db.find(Users()).filterIsInstance<Users>()
+         else
+             null
 
 
 
-         var response = api.GetUserscall().execute()
-
-         if (response.isSuccessful) {
-             val news = response.body()
-
-
-         } else {
-
-         }
-
-         api.GetUserscall()
-
-          .enqueue(object: Callback<ArrayList<UserModel>> {
-              override fun onFailure(call: Call<ArrayList<UserModel>>, t: Throwable) {
-
-
-              }
-
-              override fun onResponse(call: Call<ArrayList<UserModel>>, response: Response<ArrayList<UserModel>>) {
-                  var tttt = response.body()
-              }
-
-          })
-
-
-         api.GetUsers()
-             .subscribeOn(Schedulers.io())
-             .unsubscribeOn(Schedulers.computation())
-             .observeOn(AndroidSchedulers.mainThread())
-
-             .doOnComplete(  ({
-                 var  tt = list
-
-             }))
-             .subscribe({
-
-
-
-                 var id = it.size
-                 list=it
-
-                 var d = id
-
-             },{
-
-             })
-
-
-         if (list.size>0){
+   /*      if (list.size>0){
              db.drop(Users())
 
          }
          for (item in list){
             db.save(item)
          }
+*/
 
-         return list.filterIsInstance<Users>()
      }
 
 }

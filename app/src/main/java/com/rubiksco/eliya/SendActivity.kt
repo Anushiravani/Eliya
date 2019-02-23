@@ -38,8 +38,10 @@ import android.os.Build
 import android.support.v4.app.ActivityCompat
 import android.support.v4.content.ContextCompat
 import android.widget.ProgressBar
+import com.rubiksco.eliya.Api.StaticApi
 import com.rubiksco.eliya.DBAccess.UserDB
 import com.rubiksco.eliya.DBAccess.Users
+import com.rubiksco.eliya.Models.UserModel
 import com.rubiksco.eliya.Others.ProgressRequestBody
 import com.rubiksco.eliya.Static.*
 import ninja.sakib.pultusorm.core.PultusORM
@@ -222,6 +224,7 @@ class SendActivity : AppCompatActivity()   {
 
        // startActivityForResult(intent, READ_REQUEST_CODE)
     }
+    @SuppressLint("CheckResult")
     fun addItemsOnSpinner2() {
 
 
@@ -235,26 +238,55 @@ class SendActivity : AppCompatActivity()   {
         //val az db ye static migiram ke vaziat akharin bar ke az api listo greftim malom she
         // age null ya bishtar az 3rooz bud listo migire baad ye static save mikone ya update mikone
 
-        var liiist = userdb.resetAndsetUsers(retrofit,GetDb())
+        var listDB = userdb.GetsFromFb(GetDb())
+        var listmodel : List<UserModel> = ArrayList()
+
+        if (listDB.isNullOrEmpty()){
+
+            val api = retrofit.create(StaticApi::class.java)
 
 
 
+            api.GetUsers()
+                .subscribeOn(Schedulers.io())
+                .unsubscribeOn(Schedulers.computation())
+                .observeOn(AndroidSchedulers.mainThread())
+                .doOnComplete {
+                    updateList(listmodel)
+                }
+                .subscribe({
+
+                    listmodel=it
+                    userdb.UpdateTotal(it.filterIsInstance<Users>())
+                },{
+
+                })
 
 
-        val list = ArrayList<String>()
-        for (item in liiist!!){
-            list.add(item.Name!!)
+        }else{
+            listmodel =  listDB.filterIsInstance<UserModel>()
         }
 
 
-        val dataAdapter = ArrayAdapter(
-            this,
-            android.R.layout.simple_spinner_item, list
-        )
-        dataAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
-        selectd.adapter = dataAdapter
+
+
+
+
+    }
+fun updateList(listmodel :List<UserModel> ){
+    val list = ArrayList<String>()
+    for (item in listmodel){
+        list.add(item.Name)
     }
 
+
+    val dataAdapter = ArrayAdapter(
+        this,
+        android.R.layout.simple_spinner_item, list
+    )
+    dataAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
+    selectd.adapter = dataAdapter
+}
     fun SendDocs(){
 
 
